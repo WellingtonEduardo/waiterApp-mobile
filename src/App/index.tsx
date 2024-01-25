@@ -1,5 +1,4 @@
 
-import { Alert } from 'react-native';
 import { Button } from '../components/Button';
 import { Categories } from '../components/Categories';
 import { Header } from '../components/Header';
