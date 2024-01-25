@@ -1,4 +1,4 @@
-import { FlatList, TouchableOpacity } from 'react-native';
+import { FlatList } from 'react-native';
 import { products } from '../../mocks/products';
 import { Text } from '../Text';
 import { ProductImage, Product, ProductDetails, Separator, AddToCartButton } from './styles';
