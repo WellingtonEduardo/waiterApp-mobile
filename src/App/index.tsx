@@ -1,4 +1,6 @@
 
+import { Alert } from 'react-native';
+import { Button } from '../components/Button';
 import { Categories } from '../components/Categories';
 import { Header } from '../components/Header';
 import { Menu } from '../components/Menu';
@@ -30,6 +32,9 @@ export function App() {
 
       <FooterContainer>
         <Footer>
+          <Button onPress={()=> console.log('Button press')} >
+            Novo Pedido
+          </Button>
         </Footer>
       </FooterContainer>
     </>
