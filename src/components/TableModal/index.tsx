@@ -17,6 +17,12 @@ const isAndroid = Platform.OS === 'android';
 export function TableModal({ visible, onClose, onSave }: TableModalProps) {
   const [table, setTable] = useState('');
 
+  function handleSave() {
+    onSave(table);
+    setTable('');
+    onClose();
+  }
+
 
   return (
     <Modal
@@ -42,7 +48,7 @@ export function TableModal({ visible, onClose, onSave }: TableModalProps) {
             />
 
             <Button
-              onPress={() => onSave(table)}
+              onPress={handleSave}
               disabled={table.length === 0}
             >
               Salvar

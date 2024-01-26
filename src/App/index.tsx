@@ -30,11 +30,20 @@ export function App() {
     setSelectedTable(table);
   }
 
+
+  function handleCancelOrder() {
+    setSelectedTable(null);
+  }
+
+
   return (
     <>
       <Container>
 
-        <Header />
+        <Header
+          selectedTable={selectedTable}
+          onCancelOrder={handleCancelOrder}
+        />
 
         <CategoriesContainer>
           <Categories />
