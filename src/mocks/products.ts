@@ -1,4 +1,6 @@
-export const products = [
+import { Product } from '../types/Product';
+
+export const products: Product[] = [
   {
     _id: '6372e040f52e37ef85fe2c5e',
     name: 'Pizza quatro queijos',
