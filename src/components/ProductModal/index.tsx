@@ -20,14 +20,24 @@ import { Button } from '../Button';
 interface ProductModalProps {
   visible: boolean;
   onCloseModal(): void;
-  product: Product | null
+  product: Product | null;
+  onAddToCart(product: Product): void
 }
 
-export function ProductModal({ visible, product, onCloseModal }: ProductModalProps) {
+export function ProductModal({ visible, product, onCloseModal, onAddToCart }: ProductModalProps) {
 
   if (!product) {
     return null;
   }
+
+
+
+  function handleAddToCart() {
+    onAddToCart(product!);
+    onCloseModal();
+  }
+
+
 
   return (
     <Modal
@@ -84,7 +94,7 @@ export function ProductModal({ visible, product, onCloseModal }: ProductModalPro
             </Text>
           </Price>
 
-          <Button onPress={() => console.log('Button press')}>
+          <Button onPress={handleAddToCart}>
             Adicionar ao pedido
           </Button>
         </Footer>

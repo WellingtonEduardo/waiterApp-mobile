@@ -14,23 +14,13 @@ import {
 } from './styles';
 import { Cart } from '../components/Cart';
 import { CartItem } from '../types/CartItem';
-import { products } from '../mocks/products';
+import { Product } from '../types/Product';
 
 
 export function App() {
   const [isTableModalVisible, setIsTableModalVisible] = useState(false);
   const [selectedTable, setSelectedTable] = useState<null | string>(null);
-  const [cartItems, setCartItems] = useState<CartItem[]>([
-    {
-      quantity: 1,
-      product: products[0]
-    },
-    {
-      quantity: 2,
-      product: products[1]
-    },
-
-  ]);
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
 
   function handleOpenModal() {
@@ -47,6 +37,59 @@ export function App() {
 
   function handleCancelOrder() {
     setSelectedTable(null);
+    setCartItems([]);
+  }
+
+  function handleAddToCart(product: Product) {
+    if (!selectedTable) {
+      handleOpenModal();
+    }
+
+    setCartItems((prevState) => {
+      const itemIndex = prevState.findIndex(
+        cartItems => cartItems.product._id === product._id
+      );
+
+      if (itemIndex < 0) {
+        return prevState.concat({
+          quantity: 1,
+          product
+        });
+      }
+
+      const newCartItems = [...prevState];
+
+      newCartItems[itemIndex] = {
+        ...newCartItems[itemIndex],
+        quantity: newCartItems[itemIndex].quantity + 1
+      };
+
+      return newCartItems;
+    });
+
+  }
+
+  function handleDecrementCartItem(product: Product) {
+    setCartItems((prevState) => {
+      const itemIndex = prevState.findIndex(
+        cartItems => cartItems.product._id === product._id
+      );
+      const item = prevState[itemIndex];
+      const newCartItems = [...prevState];
+
+      if (item.quantity === 1) {
+        newCartItems.splice(itemIndex, 1);
+        return newCartItems;
+      }
+
+      newCartItems[itemIndex] = {
+        ...newCartItems[itemIndex],
+        quantity: newCartItems[itemIndex].quantity - 1
+      };
+
+      return newCartItems;
+
+    });
   }
 
 
@@ -64,7 +107,9 @@ export function App() {
         </CategoriesContainer>
 
         <MenuContainer>
-          <Menu />
+          <Menu
+            onAddToCart={handleAddToCart}
+          />
         </MenuContainer>
 
       </Container>
@@ -77,7 +122,11 @@ export function App() {
             </Button>
           )}
           {selectedTable && (
-            <Cart cartItems={cartItems} />
+            <Cart
+              cartItems={cartItems}
+              onAdd={handleAddToCart}
+              onDecrement={handleDecrementCartItem}
+            />
           )}
         </Footer>
       </FooterContainer>

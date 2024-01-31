@@ -15,11 +15,15 @@ import { formatCurrency } from '../../utils/formatCurrency';
 import { PlusCircle } from '../Icons/PlusCircle';
 import { MinusCircle } from '../Icons/MinusCircle';
 import { Button } from '../Button';
+import { Product } from '../../types/Product';
+import { calculatePriceTotalItems } from '../../utils/calculatePriceTotalItems';
 
 interface CartProps {
-  cartItems: CartItem[]
+  cartItems: CartItem[];
+  onAdd(product: Product): void;
+  onDecrement(product: Product): void;
 }
-export function Cart({ cartItems }: CartProps) {
+export function Cart({ cartItems, onAdd, onDecrement }: CartProps) {
   return (
     <>
       {cartItems.length > 0 && (
@@ -51,11 +55,14 @@ export function Cart({ cartItems }: CartProps) {
               </ProductContainer>
 
               <Actions>
-                <TouchableOpacity style={{ marginRight: 24 }}>
+                <TouchableOpacity
+                  style={{ marginRight: 24 }}
+                  onPress={() => onAdd(cartItem.product)}
+                >
                   <PlusCircle />
                 </TouchableOpacity>
 
-                <TouchableOpacity>
+                <TouchableOpacity onPress={()=> onDecrement(cartItem.product)}>
                   <MinusCircle />
                 </TouchableOpacity>
               </Actions>
@@ -72,7 +79,7 @@ export function Cart({ cartItems }: CartProps) {
             <>
               <Text color='#666'>Total</Text>
               <Text size={20} weight='Semibold'>
-                {formatCurrency(120)}
+                {formatCurrency(calculatePriceTotalItems(cartItems))}
               </Text>
             </>
           ) : (
