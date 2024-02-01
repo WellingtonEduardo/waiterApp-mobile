@@ -19,19 +19,33 @@ import { Product } from '../../types/Product';
 import { calculatePriceTotalItems } from '../../utils/calculatePriceTotalItems';
 import { OrderConfirmedModal } from '../OrderConfirmedModal';
 import { useState } from 'react';
+import axios from 'axios';
 
 interface CartProps {
   cartItems: CartItem[];
+  selectedTable: string
   onAdd(product: Product): void;
   onDecrement(product: Product): void;
-  onConfirmOrder(): void
+  onConfirmOrder(): void;
 }
-export function Cart({ cartItems, onAdd, onDecrement, onConfirmOrder }: CartProps) {
-  const [isLoading] = useState(true);
+export function Cart({ cartItems, onAdd, onDecrement, onConfirmOrder, selectedTable }: CartProps) {
+  const [isLoading, setIsLoading] = useState(false);
   const[isModalVisible, setIsModalVisible] = useState(false);
 
-  function handleConfirmOrder() {
+  async function handleConfirmOrder() {
+    const payload = {
+      table: selectedTable,
+      products: cartItems.map(item => ({
+        product: item.product._id,
+        quantity: item.quantity
+      }))
+    };
+    setIsLoading(true);
+
+    await axios.post('http://192.168.0.105:3001/orders', payload);
+
     setIsModalVisible(true);
+    setIsLoading(false);
   }
 
   function handleOk() {
