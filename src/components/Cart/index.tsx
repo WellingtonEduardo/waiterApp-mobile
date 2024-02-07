@@ -1,5 +1,5 @@
 import { FlatList, TouchableOpacity } from 'react-native';
-import { CartItem } from '../../types/CartItem';
+
 import {
   Actions,
   Image,
@@ -11,15 +11,18 @@ import {
   TotalContainer
 } from './styles';
 import { Text } from '../Text';
-import { formatCurrency } from '../../utils/formatCurrency';
+
 import { PlusCircle } from '../Icons/PlusCircle';
 import { MinusCircle } from '../Icons/MinusCircle';
 import { Button } from '../Button';
-import { Product } from '../../types/Product';
-import { calculatePriceTotalItems } from '../../utils/calculatePriceTotalItems';
+
 import { OrderConfirmedModal } from '../OrderConfirmedModal';
-import { useState } from 'react';
-import axios from 'axios';
+
+import { CartItem } from '../../app/types/CartItem';
+import { Product } from '../../app/types/Product';
+import { formatCurrency } from '../../app/utils/formatCurrency';
+import { calculatePriceTotalItems } from '../../app/utils/calculatePriceTotalItems';
+import { useCartController } from './useCartController';
 
 interface CartProps {
   cartItems: CartItem[];
@@ -29,29 +32,14 @@ interface CartProps {
   onConfirmOrder(): void;
 }
 export function Cart({ cartItems, onAdd, onDecrement, onConfirmOrder, selectedTable }: CartProps) {
-  const [isLoading, setIsLoading] = useState(false);
-  const[isModalVisible, setIsModalVisible] = useState(false);
 
-  async function handleConfirmOrder() {
-    const payload = {
-      table: selectedTable,
-      products: cartItems.map(item => ({
-        product: item.product._id,
-        quantity: item.quantity
-      }))
-    };
-    setIsLoading(true);
+  const {
+    isLoading,
+    isModalVisible,
+    handleConfirmOrder,
+    handleOk
+  } = useCartController({ cartItems, selectedTable, onConfirmOrder });
 
-    await axios.post('http://192.168.0.105:3001/orders', payload);
-
-    setIsModalVisible(true);
-    setIsLoading(false);
-  }
-
-  function handleOk() {
-    onConfirmOrder();
-    setIsModalVisible(false);
-  }
 
   return (
     <>
@@ -96,7 +84,7 @@ export function Cart({ cartItems, onAdd, onDecrement, onConfirmOrder, selectedTa
                   <PlusCircle />
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={()=> onDecrement(cartItem.product)}>
+                <TouchableOpacity onPress={() => onDecrement(cartItem.product)}>
                   <MinusCircle />
                 </TouchableOpacity>
               </Actions>

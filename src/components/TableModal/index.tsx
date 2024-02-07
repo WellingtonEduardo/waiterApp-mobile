@@ -1,9 +1,11 @@
-import { Modal, Platform, TouchableOpacity } from 'react-native';
+import { Modal, TouchableOpacity } from 'react-native';
 import { Text } from '../Text';
 import { Form, ModalBody, Overlay, Header, Input } from './styles';
 import { Close } from '../Icons/Close';
 import { Button } from '../Button';
-import { useState } from 'react';
+import { useTableModalController } from './useTableModalController';
+import { IS_ANDROID } from '../../app/config/constants';
+
 
 interface TableModalProps {
   visible: boolean;
@@ -12,17 +14,15 @@ interface TableModalProps {
 }
 
 
-const isAndroid = Platform.OS === 'android';
+
 
 export function TableModal({ visible, onClose, onSave }: TableModalProps) {
-  const [table, setTable] = useState('');
 
-  function handleSave() {
-    onSave(table);
-    setTable('');
-    onClose();
-  }
-
+  const {
+    table,
+    setTable,
+    handleSave
+  } = useTableModalController({ onSave, onClose });
 
   return (
     <Modal
@@ -30,7 +30,7 @@ export function TableModal({ visible, onClose, onSave }: TableModalProps) {
       transparent
       animationType='fade'
     >
-      <Overlay behavior={isAndroid ? 'height' : 'padding'}>
+      <Overlay behavior={IS_ANDROID ? 'height' : 'padding'}>
         <ModalBody>
           <Header>
             <Text weight='Semibold'>Informe a mesa</Text>

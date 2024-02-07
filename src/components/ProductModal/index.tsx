@@ -1,5 +1,5 @@
 import { FlatList, Modal } from 'react-native';
-import { Product } from '../../types/Product';
+
 import {
   CloseButton,
   Image,
@@ -13,8 +13,11 @@ import {
 } from './styles';
 import { Close } from '../Icons/Close';
 import { Text } from '../Text';
-import { formatCurrency } from '../../utils/formatCurrency';
+
 import { Button } from '../Button';
+import { formatCurrency } from '../../app/utils/formatCurrency';
+import { Product } from '../../app/types/Product';
+import { useProductModalController } from './useProductModalController';
 
 
 interface ProductModalProps {
@@ -30,13 +33,9 @@ export function ProductModal({ visible, product, onCloseModal, onAddToCart }: Pr
     return null;
   }
 
-
-
-  function handleAddToCart() {
-    onAddToCart(product!);
-    onCloseModal();
-  }
-
+  const {
+    handleAddToCart
+  } = useProductModalController({ product, onCloseModal, onAddToCart });
 
 
   return (

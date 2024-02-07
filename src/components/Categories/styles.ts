@@ -1,7 +1,7 @@
-import { Platform } from 'react-native';
 import styled from 'styled-components/native';
+import { IS_ANDROID } from '../../app/config/constants';
 
-const isAndroid = Platform.OS === 'android';
+
 
 export const CategoryContainer = styled.TouchableOpacity`
   align-items: center;
@@ -18,6 +18,6 @@ export const Icon = styled.View`
   justify-content: center;
   align-items: center;
   margin-bottom: 8px;
-  box-shadow: 0px 2px 1px rgba(0,0,0, ${isAndroid ? 1 : 0.1});
+  box-shadow: 0px 2px 1px rgba(0,0,0, ${IS_ANDROID ? 1 : 0.1});
   elevation: 2;
  `;
